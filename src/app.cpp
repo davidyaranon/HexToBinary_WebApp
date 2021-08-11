@@ -1,49 +1,38 @@
 #include <server.h>
-#include <Hangman.h>
+#include <BinaryHexDecimal.h>
+#include <iostream>
 
 using namespace crowJSON;
 
+int main(int argc, char** argv)
+{
+  Server server(argc, argv);
+  server.renderHTML("/", "index.html");
 
-int main(int argc, char** argv){
+  server.route("/clickButton", [&](const request& req, response&res)
+  {
+    if((req.url_params.hasKey("hexValue")) 
+    && (req.url_params.hasKey("littleEndian")))
+    {
+      std::string hex = req.url_params.get("hexValue");
+      std::string little = req.url_params.get("littleEndian");
 
-    init(); //Initializes all variables needed for hangman
-    Server server(argc, argv);
-    server.renderHTML("/", "index.html");
+      json binary = hexToBinary(hex);
+      json littleEndianBinary = hexToBinary(little);
 
+      std::string leb = littleEndianBinary["binary"];
+      long led = littleEndianBinary["decimal"];
+      binary["littleEndian"] = leb;
+      binary["decimalLittleEndian"] = led;
 
-    
-    server.route("/initial", [&](const request& req, response& res){
-        init();
-        res.sendJSON(getInit());
-    });
+      res.sendJSON(binary);
+    }
+    else
+    {
+      res.sendError400();
+    }
 
+  });
 
-
-    server.route("/startGame", [](const request& req, response& res){
-        json theWord = getWord();
-        res.sendJSON(theWord);
-    });
-
-
-
-    server.route("/checkLetter", [&](const request& req, response& res){
-        if(req.url_params.hasKey("theLetter")){
-            std::string letter = req.url_params.get("theLetter");
-            json check = checkLetter(letter);
-            res.sendJSON(check);
-        }
-        else{
-            res.sendError400();
-        }
-    });
-
-
-
-    server.route("/getDrawings", [](const request& req, response& res){
-        res.sendJSON(getInit());
-    });
-
-
-
-    server.run();
+  server.run();
 }
