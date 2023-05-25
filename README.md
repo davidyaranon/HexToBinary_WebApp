@@ -1,5 +1,7 @@
+HOW TO RUN:
+
+cd HexToBinary_WebApp
 make server
-then
 ./bin/server -t templates -s static
-then 
-go to http://localhost:18080/
+
+Open http://localhost:18080/ on web browser :)
