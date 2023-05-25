@@ -1,4 +1,4 @@
-HOW TO RUN: <br /><br />
+HOW TO RUN (must be on Linux or Ubuntu env): <br /><br />
 
 cd HexToBinary_WebApp <br />
 make server <br />
