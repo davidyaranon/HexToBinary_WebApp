@@ -1,5 +1,3 @@
-#Hex To Binary
-
 HOW TO RUN:
 
 cd HexToBinary_WebApp
